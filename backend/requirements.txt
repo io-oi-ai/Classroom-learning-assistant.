@@ -1,0 +1,12 @@
+fastapi==0.104.1
+uvicorn==0.24.0
+python-multipart==0.0.6
+python-dotenv==1.0.0
+PyPDF2==3.0.1
+SpeechRecognition==3.10.0
+moviepy==1.0.3
+google-cloud-aiplatform==1.36.4
+pydantic==2.5.2
+python-jose==3.3.0
+passlib==1.7.4
+bcrypt==4.0.1 
