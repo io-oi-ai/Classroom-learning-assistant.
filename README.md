@@ -1,116 +1,104 @@
-# AI智能助手系统
+# AI学习助手
 
-这是一个基于Google AI Studio API的智能助手系统，支持多模态输入（PDF、音频、视频）并能够进行智能回复。
+这是一个基于Google Gemini API的AI学习助手，可以处理文本对话和多种文件类型（包括PDF、音频和视频）。系统使用最新的Gemini 2.0 Flash模型，支持多模态交互。
 
 ## 功能特点
 
-1. 多模态输入支持
-   - PDF文档上传和解析
-   - 音频文件上传和转写
-   - 视频文件上传和内容提取
-
-2. AI智能回复
-   - 基于上传内容进行智能分析和回复
-   - 支持上下文理解
-   - 多语言支持
+- **文本对话**：与AI进行自然语言对话，提问各类问题
+- **PDF文件处理**：上传PDF文档，AI会分析内容并提供摘要和见解
+- **音频处理**：上传音频文件，AI会进行语音识别和内容分析
+- **视频处理**：上传视频文件，AI会分析视频内容、场景和提供转录
 
 ## 技术架构
 
-- 后端：Python FastAPI
-- 前端：React + TypeScript
-- 文件处理：
-  - PDF处理：PyPDF2
-  - 音频处理：SpeechRecognition
-  - 视频处理：MoviePy
-- AI接口：Google AI Studio API
-
-## 环境要求
-
-- Python 3.8+
-- Node.js 14+
-- Google AI Studio API密钥
-
-## 安装步骤
-
-1. 克隆项目
-```bash
-git clone [项目地址]
-```
-
-2. 安装后端依赖
-```bash
-cd backend
-pip install -r requirements.txt
-```
-
-3. 安装前端依赖
-```bash
-cd frontend
-npm install
-```
-
-4. 配置环境变量
-创建 `.env` 文件并添加以下配置：
-```
-GOOGLE_AI_API_KEY=你的API密钥
-```
+- **前端**：原生HTML、CSS和JavaScript
+- **后端**：Python HTTP服务器
+- **AI模型**：Google Gemini 2.0 Flash (支持多模态输入)
 
 ## 使用方法
 
-1. 启动后端服务
+### 系统要求
+- Python 3.7+
+- 浏览器：Chrome、Firefox、Safari或Edge
+- 有效的Google AI API密钥
+
+### 安装步骤
+
+1. 克隆本仓库
+```bash
+git clone <仓库地址>
+cd 大学生课堂
+```
+
+2. 安装依赖
+```bash
+pip install requests PyPDF2
+```
+
+3. 配置API密钥
+在终端中设置环境变量或创建.env文件:
+```bash
+export GOOGLE_AI_API_KEY=你的API密钥
+```
+
+4. 启动后端服务
 ```bash
 cd backend
-uvicorn main:app --reload
+python run.py
 ```
 
-2. 启动前端服务
+5. 启动前端
 ```bash
 cd frontend
-npm start
+python -m http.server 3000
 ```
 
-3. 访问系统
-打开浏览器访问 http://localhost:3000
-
-## API文档
-
-### 文件上传接口
-
-1. PDF上传
+6. 打开浏览器访问
 ```
-POST /api/upload/pdf
-Content-Type: multipart/form-data
+http://localhost:3000
 ```
 
-2. 音频上传
-```
-POST /api/upload/audio
-Content-Type: multipart/form-data
-```
+## 使用限制
 
-3. 视频上传
-```
-POST /api/upload/video
-Content-Type: multipart/form-data
-```
+- PDF文件：支持大部分标准PDF格式
+- 音频文件：支持mp3、wav、m4a格式，大小限制20MB
+- 视频文件：支持mp4、avi、mov格式，大小限制20MB，时长最长90分钟
 
-### AI对话接口
+## 分支说明
 
-```
-POST /api/chat
-Content-Type: application/json
-```
+- **main**: 主分支，稳定版本
+- **gemini-2.0-flash**: 使用Gemini 2.0 Flash模型的版本
+- **enhanced-file-handling**: 增强文件处理功能的版本（当前分支）
 
-## 注意事项
+## 系统架构
 
-1. 请确保上传的文件大小不超过系统限制
-2. 支持的音频格式：WAV, MP3, M4A
-3. 支持的视频格式：MP4, AVI, MOV
-4. 请妥善保管API密钥，不要泄露给他人
+### 前端
+- 轻量级网页界面，提供文字对话和文件上传两种主要交互方式
+- 异步通信，实时展示AI回复
 
-## 更新日志
+### 后端
+- Python简易HTTP服务器
+- 文件处理模块：支持PDF、音频和视频
+- Google Gemini API集成模块
 
-### v1.0.0 (2024-03-21)
-- 初始版本发布
-- 支持基础的文件上传功能
-- 集成Google AI Studio API 
+## 未来计划
+- 添加聊天历史保存功能
+- 增加更多文件格式支持
+- 优化用户界面，添加更多交互元素
+- 增加响应式设计，支持移动设备
+
+## 故障排除
+
+如遇问题，请检查：
+1. API密钥是否有效
+2. 网络连接是否稳定
+3. 文件大小是否超出限制
+4. 文件格式是否受支持
+
+## 贡献指南
+
+欢迎提交Pull Request或Issues来帮助改进这个项目。
+
+## 许可证
+
+MIT License 
