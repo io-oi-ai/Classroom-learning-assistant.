@@ -1,0 +1,43 @@
+# 系统环境要求
+
+## 开发环境要求
+- Node.js >= 18.0.0
+- pnpm >= 8.0.0
+- Python >= 3.9
+
+## 操作系统支持
+- Windows 10 或更高版本
+- macOS 10.15 或更高版本
+- Linux (主流发行版)
+
+## 浏览器要求
+- Chrome >= 90
+- Firefox >= 90
+- Safari >= 14
+- Edge >= 90
+
+## 环境变量配置
+- NEXT_PUBLIC_API_URL: API服务器地址
+- GOOGLE_AI_API_KEY: Google AI API密钥
+
+## 硬件要求
+- 内存: >= 8GB RAM
+- 存储空间: >= 1GB 可用空间
+
+## 开发工具建议
+- VSCode 或其他现代化 IDE
+- Git >= 2.30.0
+
+## 网络要求
+- 稳定的互联网连接
+- 访问 npm 仓库的网络权限
+
+## 依赖版本
+- Next.js = 15.1.0
+- React = 19.x
+- TypeScript = 5.x
+- Tailwind CSS = 3.4.17
+
+## 可选但推荐的工具
+- Docker (用于容器化部署)
+- nvm 或 fnm (Node.js 版本管理工具) 

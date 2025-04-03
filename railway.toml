@@ -2,7 +2,7 @@
 builder = "nixpacks"
 
 [deploy]
-startCommand = "python backend/run.py"
+startCommand = "gunicorn -w 4 -b 0.0.0.0:$PORT backend.run:app"
 healthcheckPath = "/api/health"
 healthcheckTimeout = 100
 restartPolicyType = "ON_FAILURE"

@@ -754,7 +754,14 @@ class SimpleHTTPRequestHandler(SimpleHTTPRequestHandler):
                 "error": f"提取重点失败: {str(e)}"
             }, ensure_ascii=False)
 
-def run():
+def create_app():
+    # 初始化数据文件
+    init_data_files()
+    return SimpleHTTPRequestHandler
+
+app = create_app()
+
+if __name__ == '__main__':
     # 初始化数据文件
     init_data_files()
     
@@ -765,7 +772,4 @@ def run():
         httpd.serve_forever()
     except KeyboardInterrupt:
         print("\nShutting down server...")
-        httpd.server_close()
-
-if __name__ == '__main__':
-    run() 
+        httpd.server_close() 
