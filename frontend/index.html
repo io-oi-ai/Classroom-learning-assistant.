@@ -3,133 +3,233 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI智能助手</title>
+    <title>AI智能学习助手</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             background-color: #f5f5f5;
+            height: 100vh;
+            overflow: hidden;
         }
         .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            height: 100vh;
+            width: 100%;
         }
         h1 {
             text-align: center;
             color: #1976d2;
-            margin-bottom: 20px;
+            margin: 10px 0;
+            font-size: 1.5em;
         }
-        .tabs {
+        h2 {
+            color: #333;
+            margin: 10px 0;
+            font-size: 1.2em;
+        }
+        
+        /* 左侧课程列表 */
+        .course-sidebar {
+            width: 200px;
+            background-color: white;
+            border-right: 1px solid #ddd;
+            padding: 15px;
             display: flex;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #ddd;
+            flex-direction: column;
+            overflow-y: auto;
         }
-        .tab {
-            padding: 10px 20px;
-            cursor: pointer;
+        .course-list {
+            flex: 1;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+        .course-item {
+            padding: 10px;
+            margin: 5px 0;
             background-color: #f0f0f0;
-            border: 1px solid #ddd;
-            border-bottom: none;
-            border-radius: 4px 4px 0 0;
-            margin-right: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
         }
-        .tab.active {
+        .course-item:hover {
+            background-color: #e0e0e0;
+        }
+        .course-item.active {
             background-color: #1976d2;
             color: white;
-            border-color: #1976d2;
         }
-        .tab-content {
-            display: none;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        .upload-area {
-            border: 2px dashed #ccc;
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 20px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .upload-area:hover {
-            background-color: #f0f0f0;
-        }
-        .file-types {
-            display: flex;
-            justify-content: center;
-            margin-top: 10px;
-            gap: 10px;
-        }
-        .file-type {
-            padding: 5px 10px;
-            background-color: #e0e0e0;
-            border-radius: 15px;
-            font-size: 12px;
-        }
-        .message-area {
-            margin-bottom: 20px;
-        }
-        textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            resize: vertical;
-            min-height: 100px;
-            font-family: inherit;
-        }
-        button {
-            background-color: #1976d2;
+        .new-course-btn {
+            background-color: #4caf50;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 10px;
             border-radius: 4px;
             cursor: pointer;
-            width: 100%;
-            font-size: 16px;
-            transition: background-color 0.3s;
+            font-size: 14px;
+            margin-bottom: 10px;
         }
-        button:hover {
-            background-color: #1565c0;
+        .new-course-form {
+            margin-top: 10px;
+            display: none;
         }
-        button:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
+        .new-course-form.active {
+            display: block;
         }
-        .response-area {
-            margin-top: 20px;
+        
+        /* 中间内容区 */
+        .content-area {
+            width: 300px;
             padding: 15px;
-            background-color: #f8f9fa;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #ddd;
+        }
+        .course-header {
+            padding: 10px;
+            background-color: #f0f0f0;
             border-radius: 4px;
-            white-space: pre-wrap;
+            margin-bottom: 15px;
+        }
+        .file-list {
+            flex: 1;
+            overflow-y: auto;
+            background-color: #f8f8f8;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+        .file-item {
+            padding: 8px;
+            margin: 4px 0;
+            background-color: white;
+            border-radius: 4px;
             border-left: 4px solid #1976d2;
+            position: relative;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            font-size: 0.95em;
+        }
+        .file-item:hover {
+            background-color: #f5f5f5;
+        }
+        .file-item.selected {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffc107;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .file-checkbox {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+        .file-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+            padding-left: 22px; /* 为复选框留出空间 */
+        }
+        .file-name {
+            font-weight: bold;
+            flex: 1;
+            padding-right: 10px;
+        }
+        .file-type-badge {
+            display: inline-block;
+            padding: 1px 6px;
+            background-color: #1976d2;
+            color: white;
+            border-radius: 8px;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+        .file-info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 5px;
+            font-size: 0.8em;
+            color: #666;
+        }
+        .file-upload-time {
+            flex: 1;
+        }
+        .delete-file-btn {
+            width: 28px;
+            height: 28px;
+            background-color: rgba(244, 67, 54, 0.1);
+            color: #f44336;
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+        }
+        .delete-file-btn:hover {
+            background-color: rgba(244, 67, 54, 0.2);
+            border-color: rgba(244, 67, 54, 0.5);
+            transform: scale(1.1);
+        }
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .upload-btn, .summarize-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .upload-btn {
+            background-color: #1976d2;
+            color: white;
+        }
+        .summarize-btn {
+            background-color: #ff9800;
+            color: white;
+        }
+        
+        /* 右侧聊天区 */
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: white;
         }
         .chat-history {
-            margin-top: 30px;
-            border-top: 1px solid #eee;
-            padding-top: 20px;
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            background-color: #f8f8f8;
         }
         .chat-message {
             margin-bottom: 15px;
             padding: 10px;
             border-radius: 4px;
+            max-width: 90%;
         }
         .user-message {
             background-color: #e3f2fd;
-            margin-left: 20%;
+            margin-left: 15%;
             border-radius: 10px 10px 0 10px;
         }
         .ai-message {
             background-color: #f1f1f1;
-            margin-right: 20%;
+            margin-right: 15%;
             border-radius: 10px 10px 10px 0;
         }
         .message-header {
@@ -141,13 +241,82 @@
         .message-content {
             white-space: pre-wrap;
         }
-        .error {
-            color: red;
-            margin-top: 10px;
+        .chat-input {
+            padding: 15px;
+            border-top: 1px solid #ddd;
         }
+        .message-textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: none;
+            height: 80px;
+            margin-bottom: 10px;
+            font-family: inherit;
+        }
+        .send-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        /* 上传进度显示 */
+        .upload-progress {
+            height: 6px;
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 3px;
+            margin-top: 5px;
+            overflow: hidden;
+            display: none;
+        }
+        .upload-progress-bar {
+            height: 100%;
+            background-color: #4caf50;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        /* 新建提问按钮 */
+        .new-chat-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 20px;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        /* 加载和错误提示 */
         .loading {
             text-align: center;
-            margin-top: 10px;
+            margin: 20px 0;
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
         }
         .spinner {
             border: 4px solid #f3f3f3;
@@ -155,207 +324,667 @@
             border-radius: 50%;
             width: 30px;
             height: 30px;
-            animation: spin 2s linear infinite;
+            animation: spin 1s linear infinite;
             margin: 0 auto;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        .error {
+            color: #d32f2f;
+            background-color: #ffebee;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>AI智能助手</h1>
-        
-        <div class="tabs">
-            <div class="tab active" data-tab="chat">文字对话</div>
-            <div class="tab" data-tab="upload">文件上传</div>
-        </div>
-        
-        <div class="tab-content active" id="chat-tab">
-            <div class="message-area">
-                <textarea id="messageInput" placeholder="输入您的问题..."></textarea>
-                <button id="sendButton">发送</button>
-            </div>
-        </div>
-        
-        <div class="tab-content" id="upload-tab">
-            <div id="uploadArea" class="upload-area">
-                <p>点击或拖放文件到此处上传</p>
-                <div class="file-types">
-                    <span class="file-type">PDF文档</span>
-                    <span class="file-type">音频文件(WAV,MP3,M4A)</span>
-                    <span class="file-type">视频文件(MP4,AVI,MOV)</span>
+        <!-- 左侧课程列表 -->
+        <div class="course-sidebar">
+            <h1>AI学习助手</h1>
+            <button id="newCourseBtn" class="new-course-btn">+ 新建课程</button>
+            
+            <div id="newCourseForm" class="new-course-form">
+                <input type="text" id="newCourseName" placeholder="输入课程名称" style="width: 100%; padding: 8px; margin-bottom: 5px;">
+                <div style="display: flex; gap: 5px;">
+                    <button id="createCourseBtn" style="flex: 1; padding: 8px; background: #4caf50; color: white; border: none; border-radius: 4px; cursor: pointer;">创建</button>
+                    <button id="cancelCreateBtn" style="flex: 1; padding: 8px; background: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer;">取消</button>
                 </div>
-                <input type="file" id="fileInput" style="display: none;" accept=".pdf,.wav,.mp3,.m4a,.mp4,.avi,.mov">
+            </div>
+            
+            <div id="courseList" class="course-list">
+                <!-- 课程列表将通过JavaScript动态生成 -->
+                <div class="course-item">加载中...</div>
             </div>
         </div>
         
-        <div id="errorMessage" class="error" style="display: none;"></div>
-        
-        <div id="loading" class="loading" style="display: none;">
-            <div class="spinner"></div>
-            <p>正在处理，请稍候...</p>
+        <!-- 中间内容区 -->
+        <div class="content-area">
+            <div id="courseHeader" class="course-header">
+                <h2 id="currentCourseName">未选择课程</h2>
+                <div id="courseDescription" style="color: #666; font-size: 0.9em;">请从左侧选择一个课程，或创建新课程</div>
+            </div>
+            
+            <div id="fileList" class="file-list">
+                <!-- 文件列表将通过JavaScript动态生成 -->
+                <div style="text-align: center; color: #888; margin-top: 50px;">
+                    未选择课程或课程中没有文件
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button id="uploadBtn" class="upload-btn" disabled>上传文件</button>
+                <button id="summarizeBtn" class="summarize-btn" disabled>重点提取</button>
+            </div>
+            
+            <input type="file" id="fileInput" style="display: none;" accept=".pdf,.wav,.mp3,.m4a,.mp4,.avi,.mov" multiple>
         </div>
         
-        <div id="chatHistory" class="chat-history">
-            <!-- 聊天历史记录将在这里动态添加 -->
+        <!-- 右侧聊天区 -->
+        <div class="chat-area">
+            <div id="chatHistory" class="chat-history">
+                <!-- 聊天记录将通过JavaScript动态生成 -->
+                <div class="chat-message ai-message">
+                    <div class="message-header">AI助手</div>
+                    <div class="message-content">您好！我是您的AI学习助手。请选择或创建一个课程，上传相关学习资料，我可以帮您分析内容并回答问题。</div>
+                </div>
+                
+                <!-- 新建提问按钮 -->
+                <button id="newChatBtn" class="new-chat-btn" title="新建提问">+</button>
+            </div>
+            
+            <div class="chat-input">
+                <textarea id="messageInput" class="message-textarea" placeholder="输入您的问题..."></textarea>
+                <button id="sendBtn" class="send-btn">发送</button>
+            </div>
         </div>
     </div>
-
+    
+    <div id="loading" class="loading">
+        <div class="spinner"></div>
+        <p>正在处理，请稍候...</p>
+    </div>
+    
+    <div id="errorMessage" class="error"></div>
+    
     <script>
+        // API基础URL
         const apiBaseUrl = 'http://localhost:8000';
-        const uploadArea = document.getElementById('uploadArea');
+        
+        // 全局变量
+        let courses = [];
+        let currentCourseId = null;
+        let selectedFileIds = [];
+        
+        // DOM元素
+        const courseList = document.getElementById('courseList');
+        const newCourseBtn = document.getElementById('newCourseBtn');
+        const newCourseForm = document.getElementById('newCourseForm');
+        const newCourseName = document.getElementById('newCourseName');
+        const createCourseBtn = document.getElementById('createCourseBtn');
+        const cancelCreateBtn = document.getElementById('cancelCreateBtn');
+        const currentCourseName = document.getElementById('currentCourseName');
+        const courseDescription = document.getElementById('courseDescription');
+        const fileList = document.getElementById('fileList');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const summarizeBtn = document.getElementById('summarizeBtn');
         const fileInput = document.getElementById('fileInput');
-        const messageInput = document.getElementById('messageInput');
-        const sendButton = document.getElementById('sendButton');
-        const errorMessage = document.getElementById('errorMessage');
-        const loading = document.getElementById('loading');
         const chatHistory = document.getElementById('chatHistory');
-        const tabs = document.querySelectorAll('.tab');
-        const tabContents = document.querySelectorAll('.tab-content');
-
-        // 处理标签切换
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                // 移除所有标签的active类
-                tabs.forEach(t => t.classList.remove('active'));
-                // 给当前标签添加active类
-                tab.classList.add('active');
-                
-                // 隐藏所有内容
-                tabContents.forEach(content => content.classList.remove('active'));
-                // 显示当前标签对应的内容
-                document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
-            });
+        const messageInput = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const loading = document.getElementById('loading');
+        const errorMessage = document.getElementById('errorMessage');
+        const newChatBtn = document.getElementById('newChatBtn');
+        
+        // 显示/隐藏新建课程表单
+        newCourseBtn.addEventListener('click', () => {
+            newCourseForm.classList.add('active');
+            newCourseName.focus();
         });
-
-        // 处理文件上传区域的点击事件
-        uploadArea.addEventListener('click', () => {
+        
+        // 取消创建课程
+        cancelCreateBtn.addEventListener('click', () => {
+            newCourseForm.classList.remove('active');
+            newCourseName.value = '';
+        });
+        
+        // 创建新课程
+        createCourseBtn.addEventListener('click', () => {
+            const name = newCourseName.value.trim();
+            if (!name) {
+                showError('请输入课程名称');
+                return;
+            }
+            
+            createCourse(name);
+        });
+        
+        // 上传文件按钮点击
+        uploadBtn.addEventListener('click', () => {
+            if (!currentCourseId) {
+                showError('请先选择一个课程');
+                return;
+            }
             fileInput.click();
         });
-
-        // 处理文件拖放
-        uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.style.backgroundColor = '#f0f0f0';
-        });
-
-        uploadArea.addEventListener('dragleave', () => {
-            uploadArea.style.backgroundColor = 'white';
-        });
-
-        uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadArea.style.backgroundColor = 'white';
-            
-            if (e.dataTransfer.files.length > 0) {
-                handleFile(e.dataTransfer.files[0]);
-            }
-        });
-
-        // 处理文件选择
+        
+        // 文件选择监听
         fileInput.addEventListener('change', () => {
             if (fileInput.files.length > 0) {
-                handleFile(fileInput.files[0]);
+                handleMultipleFiles(fileInput.files);
             }
         });
-
-        // 处理发送按钮点击
-        sendButton.addEventListener('click', () => {
-            const message = messageInput.value.trim();
-            if (message) {
-                addMessageToHistory('用户', message);
-                sendMessage(message);
-                messageInput.value = '';
+        
+        // 一键总结按钮点击
+        summarizeBtn.addEventListener('click', () => {
+            if (!currentCourseId) {
+                showError('请先选择一个课程');
+                return;
             }
+            
+            summarizeCourse(currentCourseId);
         });
-
+        
+        // 发送消息按钮点击
+        sendBtn.addEventListener('click', () => {
+            sendMessage();
+        });
+        
+        // 新建提问按钮点击
+        newChatBtn.addEventListener('click', () => {
+            startNewChat();
+        });
+        
         // 支持回车键发送消息
         messageInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
-                sendButton.click();
+                sendMessage();
             }
         });
-
-        // 处理文件上传
-        function handleFile(file) {
-            // 检查文件类型
-            let endpoint = '';
-            let fileTypeText = '';
+        
+        // 初始化页面
+        function initPage() {
+            loadCourses();
+        }
+        
+        // 加载课程列表
+        function loadCourses() {
+            courseList.innerHTML = '<div class="course-item">加载中...</div>';
             
-            if (file.type === 'application/pdf') {
-                endpoint = '/api/upload/pdf';
-                fileTypeText = 'PDF文档';
-            } else if (file.type.startsWith('audio/')) {
-                endpoint = '/api/upload/audio';
-                fileTypeText = '音频文件';
-            } else if (file.type.startsWith('video/')) {
-                endpoint = '/api/upload/video';
-                fileTypeText = '视频文件';
-            } else {
-                showError('不支持的文件类型');
+            fetch(apiBaseUrl + '/api/courses')
+                .then(response => response.json())
+                .then(data => {
+                    courses = data.courses || [];
+                    renderCourseList();
+                })
+                .catch(error => {
+                    showError('加载课程失败: ' + error.message);
+                    courseList.innerHTML = '<div class="course-item" style="color: #d32f2f;">加载失败，请刷新重试</div>';
+                });
+        }
+        
+        // 渲染课程列表
+        function renderCourseList() {
+            courseList.innerHTML = '';
+            
+            if (courses.length === 0) {
+                courseList.innerHTML = '<div style="text-align: center; color: #888; margin-top: 20px;">暂无课程，请创建</div>';
                 return;
             }
-
+            
+            courses.forEach(course => {
+                const courseItem = document.createElement('div');
+                courseItem.className = 'course-item';
+                if (course.id === currentCourseId) {
+                    courseItem.classList.add('active');
+                }
+                courseItem.textContent = course.name;
+                courseItem.addEventListener('click', () => selectCourse(course.id));
+                courseList.appendChild(courseItem);
+            });
+        }
+        
+        // 选择课程
+        function selectCourse(courseId) {
+            currentCourseId = courseId;
+            const course = courses.find(c => c.id === courseId);
+            
+            currentCourseName.textContent = course.name;
+            courseDescription.textContent = `创建于: ${formatDate(course.createTime)}`;
+            
+            uploadBtn.disabled = false;
+            summarizeBtn.disabled = false;
+            
+            renderCourseList();
+            loadCourseFiles(courseId);
+        }
+        
+        // 加载课程文件
+        function loadCourseFiles(courseId) {
+            fileList.innerHTML = '<div style="text-align: center; margin: 20px 0;">加载中...</div>';
+            
+            fetch(apiBaseUrl + '/api/courses/' + courseId + '/files')
+                .then(response => response.json())
+                .then(data => {
+                    const files = data.files || [];
+                    renderFileList(files);
+                })
+                .catch(error => {
+                    showError('加载文件失败: ' + error.message);
+                    fileList.innerHTML = '<div style="text-align: center; color: #d32f2f; margin: 20px 0;">加载失败，请刷新重试</div>';
+                });
+        }
+        
+        // 渲染文件列表
+        function renderFileList(files) {
+            fileList.innerHTML = '';
+            
+            if (files.length === 0) {
+                fileList.innerHTML = '<div style="text-align: center; color: #888; margin-top: 50px;">暂无文件，请上传</div>';
+                return;
+            }
+            
+            files.forEach(file => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.dataset.fileId = file.id;
+                
+                // 检查是否已选择
+                if (selectedFileIds.includes(file.id)) {
+                    fileItem.classList.add('selected');
+                }
+                
+                let typeBadge = '';
+                let typeColor = '#1976d2';
+                
+                if (file.type === 'pdf') {
+                    typeBadge = 'PDF';
+                    typeColor = '#e91e63';
+                } else if (file.type === 'audio') {
+                    typeBadge = '音频';
+                    typeColor = '#9c27b0';
+                } else if (file.type === 'video') {
+                    typeBadge = '视频';
+                    typeColor = '#2196f3';
+                }
+                
+                // 添加复选框和修改文件项结构
+                fileItem.innerHTML = `
+                    <input type="checkbox" class="file-checkbox" data-file-id="${file.id}" ${selectedFileIds.includes(file.id) ? 'checked' : ''}>
+                    <div class="file-item-header">
+                        <div class="file-name">${file.name}</div>
+                        <span class="file-type-badge" style="background-color: ${typeColor};">${typeBadge}</span>
+                    </div>
+                    <div class="file-info-row">
+                        <div class="file-upload-time">上传时间: ${formatDate(file.uploadTime)}</div>
+                        <button class="delete-file-btn" data-file-id="${file.id}" title="删除文件">×</button>
+                    </div>
+                `;
+                
+                fileList.appendChild(fileItem);
+                
+                // 添加文件项点击事件（选择/取消选择）
+                fileItem.addEventListener('click', (e) => {
+                    if (!e.target.classList.contains('delete-file-btn')) {
+                        toggleFileSelection(file.id, fileItem);
+                    }
+                });
+                
+                // 添加复选框点击事件
+                const checkbox = fileItem.querySelector('.file-checkbox');
+                checkbox.addEventListener('change', (e) => {
+                    e.stopPropagation();
+                    toggleFileSelection(file.id, fileItem);
+                });
+                
+                // 添加删除按钮点击事件
+                const deleteBtn = fileItem.querySelector('.delete-file-btn');
+                deleteBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    deleteFile(file.id, file.name);
+                });
+            });
+        }
+        
+        // 切换文件选择状态
+        function toggleFileSelection(fileId, fileItem) {
+            const index = selectedFileIds.indexOf(fileId);
+            const checkbox = fileItem.querySelector('.file-checkbox');
+            
+            if (index === -1) {
+                // 添加到选中列表
+                selectedFileIds.push(fileId);
+                fileItem.classList.add('selected');
+                checkbox.checked = true;
+            } else {
+                // 从选中列表移除
+                selectedFileIds.splice(index, 1);
+                fileItem.classList.remove('selected');
+                checkbox.checked = false;
+            }
+            
+            // 更新"总结"按钮状态
+            updateSummarizeButtonState();
+        }
+        
+        // 更新总结按钮状态
+        function updateSummarizeButtonState() {
+            const hasSelection = selectedFileIds.length > 0;
+            summarizeBtn.textContent = hasSelection ? 
+                `总结所选文件(${selectedFileIds.length})` : 
+                '一键总结全部';
+        }
+        
+        // 创建新课程
+        function createCourse(name) {
+            showLoading();
+            
+            fetch(apiBaseUrl + '/api/courses', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    hideLoading();
+                    if (data.error) {
+                        showError(data.error);
+                        return;
+                    }
+                    
+                    // 添加到课程列表
+                    courses.push(data.course);
+                    renderCourseList();
+                    
+                    // 重置表单
+                    newCourseForm.classList.remove('active');
+                    newCourseName.value = '';
+                    
+                    // 选择新创建的课程
+                    selectCourse(data.course.id);
+                    
+                    // 显示成功消息
+                    addMessageToHistory('AI助手', `成功创建课程"${name}"。您现在可以上传文件或提问相关问题了。`);
+                })
+                .catch(error => {
+                    hideLoading();
+                    showError('创建课程失败: ' + error.message);
+                });
+        }
+        
+        // 处理文件上传
+        function handleMultipleFiles(files) {
+            if (!currentCourseId) {
+                showError('请先选择一个课程');
+                return;
+            }
+            
             showLoading();
             hideError();
             
+            // 收集文件信息
+            const fileNames = Array.from(files).map(file => file.name).join(', ');
+            
             // 添加用户上传消息到历史记录
-            addMessageToHistory('用户', `上传了一个${fileTypeText}: ${file.name}`);
-
-            const formData = new FormData();
-            formData.append('file', file);
-
-            fetch(apiBaseUrl + endpoint, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                hideLoading();
-                if (data.error) {
-                    showError(data.error);
+            addMessageToHistory('用户', `上传了以下文件: ${fileNames}`);
+            
+            // 创建上传进度显示
+            const progressDiv = document.createElement('div');
+            progressDiv.className = 'upload-progress';
+            progressDiv.style.display = 'block';
+            
+            const progressBar = document.createElement('div');
+            progressBar.className = 'upload-progress-bar';
+            progressDiv.appendChild(progressBar);
+            
+            // 将进度条添加到最后一条消息
+            const lastMessage = chatHistory.lastElementChild;
+            lastMessage.appendChild(progressDiv);
+            
+            // 创建一个计数器，用于跟踪已上传的文件
+            let uploadedCount = 0;
+            let errorCount = 0;
+            const totalFiles = files.length;
+            const uploadResults = [];
+            
+            // 为每个文件创建并发送请求
+            Array.from(files).forEach(file => {
+                // 检查文件类型
+                let endpoint = '';
+                
+                if (file.type === 'application/pdf') {
+                    endpoint = '/api/upload/pdf';
+                } else if (file.type.startsWith('audio/')) {
+                    endpoint = '/api/upload/audio';
+                } else if (file.type.startsWith('video/')) {
+                    endpoint = '/api/upload/video';
                 } else {
-                    addMessageToHistory('AI助手', data.content);
+                    console.error('不支持的文件类型:', file.type);
+                    errorCount++;
+                    checkUploadCompletion();
+                    return;
                 }
-            })
-            .catch(error => {
-                hideLoading();
-                showError('上传失败: ' + error.message);
+                
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('courseId', currentCourseId);
+                
+                // 创建 XHR 以便监控上传进度
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', apiBaseUrl + endpoint, true);
+                
+                // 监听上传进度
+                xhr.upload.onprogress = function(e) {
+                    if (e.lengthComputable) {
+                        // 更新单个文件的进度
+                        const percentComplete = (e.loaded / e.total) * 100;
+                        // 更新总进度 = (已完成文件 + 当前进度比例) / 总文件数
+                        const totalPercent = ((uploadedCount + percentComplete / 100) / totalFiles) * 100;
+                        progressBar.style.width = totalPercent + '%';
+                    }
+                };
+                
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        try {
+                            const data = JSON.parse(xhr.responseText);
+                            
+                            if (data.error) {
+                                console.error('文件上传失败:', data.error);
+                                errorCount++;
+                            } else {
+                                uploadResults.push({
+                                    fileName: file.name,
+                                    content: data.content
+                                });
+                            }
+                        } catch (error) {
+                            console.error('解析响应失败:', error.message);
+                            errorCount++;
+                        }
+                    } else {
+                        console.error('上传失败: HTTP', xhr.status);
+                        errorCount++;
+                    }
+                    
+                    uploadedCount++;
+                    checkUploadCompletion();
+                };
+                
+                xhr.onerror = function() {
+                    console.error('上传失败: 网络错误');
+                    errorCount++;
+                    uploadedCount++;
+                    checkUploadCompletion();
+                };
+                
+                xhr.send(formData);
             });
+            
+            // 检查是否所有文件都已上传完成
+            function checkUploadCompletion() {
+                if (uploadedCount === totalFiles) {
+                    hideLoading();
+                    progressDiv.remove();
+                    
+                    // 显示上传结果
+                    if (errorCount === totalFiles) {
+                        showError('所有文件上传失败');
+                        addMessageToHistory('AI助手', '所有文件上传失败，请检查文件格式和大小后重试。');
+                    } else if (errorCount > 0) {
+                        showError(`${errorCount}个文件上传失败`);
+                        addMessageToHistory('AI助手', `上传完成，但有${errorCount}个文件失败。成功上传了${totalFiles - errorCount}个文件。`);
+                    } else {
+                        addMessageToHistory('AI助手', `文件上传成功！共上传了${totalFiles}个文件。`);
+                    }
+                    
+                    // 清空文件输入
+                    fileInput.value = '';
+                    
+                    // 重新加载文件列表
+                    loadCourseFiles(currentCourseId);
+                }
+            }
         }
-
-        // 发送消息
-        function sendMessage(message) {
+        
+        // 格式化总结内容
+        function formatSummary(summary) {
+            // 使用简单的文本格式，避免HTML标签
+            let formatted = summary;
+            
+            // 替换星号评级为更清晰的表示
+            formatted = formatted.replace(/★★★/g, '★★★ (核心重点)');
+            formatted = formatted.replace(/★★(?!★)/g, '★★ (次要重点)');
+            formatted = formatted.replace(/★(?!★)/g, '★ (一般知识点)');
+            
+            // 替换【核心重点】等标签为清晰的文本格式
+            formatted = formatted.replace(/【核心重点】/g, '[核心重点] ');
+            formatted = formatted.replace(/【次要重点】/g, '[次要重点] ');
+            formatted = formatted.replace(/【一般知识点】/g, '[一般知识点] ');
+            
+            return formatted;
+        }
+        
+        // 一键总结课程
+        function summarizeCourse(courseId) {
             showLoading();
             hideError();
-
+            
+            // 添加用户请求消息到历史
+            addMessageToHistory('用户', `请对"${currentCourseName.textContent}"课程内容进行重点提取`);
+            
+            // 防止重复点击
+            summarizeBtn.disabled = true;
+            
+            fetch(apiBaseUrl + '/api/courses/' + courseId + '/summarize')
+                .then(response => {
+                    // 检查HTTP状态
+                    if (!response.ok) {
+                        throw new Error(`HTTP错误: ${response.status}`);
+                    }
+                    // 尝试解析JSON
+                    return response.text().then(text => {
+                        try {
+                            return JSON.parse(text);
+                        } catch (e) {
+                            console.error('JSON解析错误:', text);
+                            throw new Error('服务器返回了无效的JSON: ' + e.message);
+                        }
+                    });
+                })
+                .then(data => {
+                    hideLoading();
+                    
+                    if (data.error) {
+                        showError(data.error);
+                        addMessageToHistory('AI助手', `抱歉，提取重点时出现错误: ${data.error}`);
+                        return;
+                    }
+                    
+                    // 检查summary是否为空或undefined
+                    if (!data.summary) {
+                        addMessageToHistory('AI助手', '无法提取重点内容，服务器返回了空数据');
+                        return;
+                    }
+                    
+                    // 格式化总结内容，使其更美观
+                    const formattedSummary = formatSummary(data.summary);
+                    
+                    addMessageToHistory('AI助手', formattedSummary);
+                })
+                .catch(error => {
+                    hideLoading();
+                    showError('提取重点失败: ' + error.message);
+                    addMessageToHistory('AI助手', `抱歉，提取重点时出现错误: ${error.message}`);
+                })
+                .finally(() => {
+                    // 恢复按钮状态
+                    summarizeBtn.disabled = false;
+                });
+        }
+        
+        // 发送消息
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message) return;
+            
+            // 添加用户消息到历史
+            addMessageToHistory('用户', message);
+            
+            // 清空输入框
+            messageInput.value = '';
+            
+            showLoading();
+            hideError();
+            
+            // 构建请求数据
+            const requestData = {
+                message: message,
+                courseId: currentCourseId || null, // 如果有选中课程，则带上课程ID
+                isNewChat: window.isNewChat || false // 添加标志是否是新对话
+            };
+            
+            // 发送后清除新对话标志
+            window.isNewChat = false;
+            
             fetch(apiBaseUrl + '/api/chat', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ message })
+                body: JSON.stringify(requestData)
             })
-            .then(response => response.json())
-            .then(data => {
-                hideLoading();
-                if (data.error) {
-                    showError(data.error);
-                } else {
+                .then(response => response.json())
+                .then(data => {
+                    hideLoading();
+                    
+                    if (data.error) {
+                        showError(data.error);
+                        return;
+                    }
+                    
                     addMessageToHistory('AI助手', data.response);
-                }
-            })
-            .catch(error => {
-                hideLoading();
-                showError('发送失败: ' + error.message);
-            });
+                })
+                .catch(error => {
+                    hideLoading();
+                    showError('发送失败: ' + error.message);
+                });
         }
-
-        // 将消息添加到历史记录
+        
+        // 将消息添加到聊天历史
         function addMessageToHistory(sender, text) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `chat-message ${sender === '用户' ? 'user-message' : 'ai-message'}`;
@@ -366,7 +995,15 @@
             
             const contentDiv = document.createElement('div');
             contentDiv.className = 'message-content';
-            contentDiv.textContent = text;
+            
+            // 检查是否包含重点提取的响应 - 如果是，则使用pre标签保持格式
+            if (sender === 'AI助手' && (text.includes('课程核心内容') || text.includes('重点内容分级') || text.includes('学习建议'))) {
+                contentDiv.style.whiteSpace = 'pre-wrap';
+                contentDiv.style.fontFamily = 'inherit';
+                contentDiv.textContent = text;
+            } else {
+                contentDiv.textContent = text;
+            }
             
             messageDiv.appendChild(headerDiv);
             messageDiv.appendChild(contentDiv);
@@ -376,29 +1013,162 @@
             // 滚动到底部
             chatHistory.scrollTop = chatHistory.scrollHeight;
         }
-
-        // 显示错误
-        function showError(text) {
-            errorMessage.textContent = text;
+        
+        // 显示错误信息
+        function showError(message) {
+            errorMessage.textContent = message;
             errorMessage.style.display = 'block';
+            setTimeout(() => {
+                errorMessage.style.display = 'none';
+            }, 5000);
         }
-
-        // 隐藏错误
+        
+        // 隐藏错误信息
         function hideError() {
             errorMessage.style.display = 'none';
         }
-
+        
         // 显示加载中
         function showLoading() {
             loading.style.display = 'block';
-            sendButton.disabled = true;
+            sendBtn.disabled = true;
+            uploadBtn.disabled = true;
+            summarizeBtn.disabled = true;
         }
-
+        
         // 隐藏加载中
         function hideLoading() {
             loading.style.display = 'none';
-            sendButton.disabled = false;
+            sendBtn.disabled = false;
+            uploadBtn.disabled = !currentCourseId;
+            summarizeBtn.disabled = !currentCourseId;
         }
+        
+        // 格式化日期
+        function formatDate(timestamp) {
+            const date = new Date(timestamp * 1000);
+            return date.toLocaleString();
+        }
+        
+        // 新建聊天
+        function startNewChat() {
+            // 清空当前对话上下文但保留欢迎消息
+            chatHistory.innerHTML = '';
+            
+            const welcomeMessage = document.createElement('div');
+            welcomeMessage.className = 'chat-message ai-message';
+            welcomeMessage.innerHTML = `
+                <div class="message-header">AI助手</div>
+                <div class="message-content">已开始新的对话！您可以问我关于${currentCourseName.textContent || '课程'}的任何问题。</div>
+            `;
+            chatHistory.appendChild(welcomeMessage);
+            
+            // 重新添加新建提问按钮
+            const newChatButton = document.createElement('button');
+            newChatButton.id = 'newChatBtn';
+            newChatButton.className = 'new-chat-btn';
+            newChatButton.title = '新建提问';
+            newChatButton.textContent = '+';
+            newChatButton.addEventListener('click', startNewChat);
+            chatHistory.appendChild(newChatButton);
+            
+            // 清空输入框
+            messageInput.value = '';
+            messageInput.focus();
+            
+            // 标记为新对话
+            window.isNewChat = true;
+        }
+        
+        // 提取主要知识点
+        function extractMainPoints(text) {
+            if (!text) return '无知识点';
+            
+            // 尝试从摘要中提取知识点
+            if (text.includes('内容描述:') || text.includes('内容描述：')) {
+                // 找到内容描述部分
+                const contentIndex = text.indexOf('内容描述:') !== -1 ? 
+                    text.indexOf('内容描述:') : text.indexOf('内容描述：');
+                    
+                let endIndex = text.indexOf('\n\n', contentIndex);
+                if (endIndex === -1) endIndex = text.length;
+                
+                // 提取内容描述部分
+                const content = text.substring(contentIndex, endIndex).replace(/内容描述[:：]\s*/, '');
+                // 限制长度更短，只显示前30-50个字
+                return content.length > 40 ? content.substring(0, 40) + '...' : content.trim();
+            }
+            
+            // 如果包含"视频是关于"或类似文本，直接提取简短描述
+            if (text.includes('视频是关于') || text.includes('文档是关于') || text.includes('音频是关于')) {
+                const aboutIndex = Math.max(
+                    text.indexOf('视频是关于'),
+                    text.indexOf('文档是关于'),
+                    text.indexOf('音频是关于')
+                );
+                if (aboutIndex !== -1) {
+                    let endIndex = text.indexOf('。', aboutIndex);
+                    if (endIndex === -1) endIndex = text.indexOf('.', aboutIndex);
+                    if (endIndex === -1) endIndex = Math.min(aboutIndex + 50, text.length);
+                    
+                    // 只显示"关于X"的核心部分
+                    const content = text.substring(aboutIndex, endIndex);
+                    const cleanContent = content.replace(/(视频|文档|音频)是关于/g, '');
+                    return cleanContent.length > 40 ? cleanContent.substring(0, 40) + '...' : cleanContent;
+                }
+            }
+            
+            // 如果没有明确的内容描述标记，尝试提取第一段的核心内容
+            const firstParagraph = text.split('\n\n')[0];
+            if (firstParagraph && firstParagraph.length > 20) {
+                return firstParagraph.length > 40 ? firstParagraph.substring(0, 40) + '...' : firstParagraph.trim();
+            }
+            
+            // 只提取前40个字符作为简介
+            return text.length > 40 ? text.substring(0, 40) + '...' : text;
+        }
+        
+        // 删除文件
+        function deleteFile(fileId, fileName) {
+            if (!confirm(`确定要删除文件"${fileName}"吗？此操作不可恢复。`)) {
+                return;
+            }
+            
+            showLoading();
+            hideError();
+            
+            fetch(apiBaseUrl + '/api/files/' + fileId, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ courseId: currentCourseId })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    hideLoading();
+                    
+                    if (data.error) {
+                        showError(data.error);
+                        return;
+                    }
+                    
+                    // 重新加载文件列表
+                    loadCourseFiles(currentCourseId);
+                    
+                    // 显示成功消息
+                    addMessageToHistory('AI助手', `文件"${fileName}"已成功删除。`);
+                })
+                .catch(error => {
+                    hideLoading();
+                    showError('删除文件失败: ' + error.message);
+                });
+        }
+        
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            initPage();
+        });
     </script>
 </body>
 </html> 
