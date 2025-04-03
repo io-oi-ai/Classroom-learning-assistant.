@@ -36,4 +36,8 @@ Tailwind CSS = 3.4.17
 
 # 可选但推荐的工具
 - Docker (用于容器化部署)
-- nvm 或 fnm (Node.js 版本管理工具) 
+- nvm 或 fnm (Node.js 版本管理工具)
+
+PyPDF2==3.0.1
+requests==2.31.0
+python-dotenv==1.0.0 
