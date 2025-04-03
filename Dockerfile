@@ -32,4 +32,7 @@ COPY --from=builder /app/.next/static ./.next/static
 EXPOSE 3000
 
 # 启动应用
-CMD ["node", "server.js"] 
+CMD ["node", "server.js"]
+
+# 添加环境变量
+ENV NEXT_PUBLIC_API_URL=https://your-api-domain.com 

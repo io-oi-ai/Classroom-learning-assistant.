@@ -5,7 +5,9 @@
   "framework": "nextjs",
   "regions": ["hkg1"],
   "env": {
-    "NEXT_PUBLIC_API_URL": "@next_public_api_url"
+    "NEXT_PUBLIC_API_URL": "@next_public_api_url",
+    "GOOGLE_AI_API_KEY": "@google_ai_api_key",
+    "NODE_ENV": "production"
   },
   "builds": [
     {

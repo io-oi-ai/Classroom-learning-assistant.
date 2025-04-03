@@ -11,6 +11,10 @@ import requests
 import PyPDF2
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 
+# 从环境变量获取端口
+PORT = int(os.getenv('PORT', 8000))
+HOST = os.getenv('HOST', '0.0.0.0')
+
 # 定义上传和数据目录
 UPLOAD_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploads')
 DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data')
@@ -135,6 +139,14 @@ def delete_file(file_id, course_id):
     except Exception as e:
         return {"error": f"删除文件时出错: {str(e)}"}
 
+# 添加健康检查端点
+def handle_health_check(handler):
+    handler.send_response(200)
+    handler.send_header('Content-type', 'application/json')
+    handler.send_header('Access-Control-Allow-Origin', '*')
+    handler.end_headers()
+    handler.wfile.write(json.dumps({"status": "healthy"}).encode('utf-8'))
+
 class SimpleHTTPRequestHandler(SimpleHTTPRequestHandler):
     def do_OPTIONS(self):
         self.send_response(200)
@@ -144,6 +156,10 @@ class SimpleHTTPRequestHandler(SimpleHTTPRequestHandler):
         self.end_headers()
     
     def do_GET(self):
+        # 添加健康检查路由
+        if self.path == '/api/health':
+            return handle_health_check(self)
+            
         self.send_response(200)
         self.send_header('Content-type', 'application/json')
         self.send_header('Access-Control-Allow-Origin', '*')
@@ -738,13 +754,18 @@ class SimpleHTTPRequestHandler(SimpleHTTPRequestHandler):
                 "error": f"提取重点失败: {str(e)}"
             }, ensure_ascii=False)
 
-def run(server_class=HTTPServer, handler_class=SimpleHTTPRequestHandler, port=8000):
-    server_address = ('', port)
-    httpd = server_class(server_address, handler_class)
-    print(f'启动服务器在端口 {port}')
-    httpd.serve_forever()
-
-if __name__ == '__main__':
+def run():
     # 初始化数据文件
     init_data_files()
+    
+    # 启动服务器
+    httpd = HTTPServer((HOST, PORT), SimpleHTTPRequestHandler)
+    print(f"Server started at http://{HOST}:{PORT}")
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        print("\nShutting down server...")
+        httpd.server_close()
+
+if __name__ == '__main__':
     run() 
