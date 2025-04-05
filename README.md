@@ -184,4 +184,11 @@
 - 验证环境变量
 - 确认端口是否被占用
 - 检查SSL证书有效性
-- 验证文件权限 
+- 验证文件权限
+- 
+### 7. 部署状态
+
+- 前端: ![Vercel](https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white)
+- 后端: ![Render](https://img.shields.io/badge/Render-%46E3B7.svg?style=for-the-badge&logo=render&logoColor=white)
+
+最后更新: 2025-04-05
