@@ -16,7 +16,7 @@ def status():
         "service": "classroom-learning-assistant"
     })
 
-# 添加一个通配符路由来处理不存在的路径
+# 添加通配符路由处理其他请求
 @app.errorhandler(404)
 def not_found(e):
     return jsonify({"status": "error", "message": "Route not found"}), 404
