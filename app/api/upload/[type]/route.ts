@@ -87,8 +87,9 @@ async function callGeminiMultimodalApi(filePath: string, fileType: string, promp
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { type: string } }
+  context: { params: Promise<{ type: string }> }
 ) {
+  const params = await context.params;
   const fileType = params.type;
   
   // 验证文件类型
