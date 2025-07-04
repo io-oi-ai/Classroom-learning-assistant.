@@ -50,4 +50,4 @@ ssl/
 
 # Temporary files
 *.tmp
-*.temp 
+*.temp *.tar.gz
