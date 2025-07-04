@@ -1,15 +1,12 @@
-   {
-     "version": 2,
-     "github": {
-       "enabled": false
-     },
-     "builds": [
-       { "src": "package.json", "use": "@vercel/next" }
-     ],
-     "rewrites": [
-       { "source": "/api/(.*)", "destination": "https://classroom-learning-assistant-backend.onrender.com/api/$1" }
-     ],
-     "env": {
-       "NEXT_PUBLIC_API_URL": "https://classroom-learning-assistant-backend.onrender.com"
-     }
-   }
+{
+  "version": 2,
+  "builds": [
+    { "src": "package.json", "use": "@vercel/next" }
+  ],
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "https://classroom-learning-assistant-backend.onrender.com/api/$1" }
+  ],
+  "env": {
+    "NEXT_PUBLIC_API_URL": "https://classroom-learning-assistant-backend.onrender.com"
+  }
+}
